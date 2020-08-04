@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      background-color: #FFFFFF;
+      align-items: center;
+      text-align: center;
+      font-family: courier;
+    }
+	table {
+  border-collapse: collapse;
+}
+    h3{
+      color:red;
+    }
+    p{
+	
+      font-size: 20px;
+      color: black;
+      font-weight: 900;
+    }
+
+    td,
+    th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: center;
+      background-color: #3b5998;
+      color: white;
+    }
+tr:nth-child(2)
+{
+  background-color: #4CAF50;
+  color:black;
+}
+  </style>
+  <script>
+
+
+    function myFun() {
+     
+      document.getElementById("Save").onclick = function fun() {
+        var x = document.forms["myForm"]["pin_code"].value;
+        if (x.length === 6) {
+          var Url = "https://api.postalpincode.in/pincode/" + x;
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', Url, true);
+          xhr.send();
+          xhr.onreadystatechange = processRequest;
+          function processRequest(e) {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+              var response1 = JSON.parse(xhr.responseText);
+              console.log(response1, response1.length)
+              var txt = "";
+              var txt1 = ""
+              txt += "<table border='1' align=center>"
+              for (let x = 0; x <= response1.length; x++) {
+                if (x === 0) {
+                  for (y in response1[x]) {
+                    
+if(y==="Pincode"){
+                      y="PIN Code"
+                    }
+                    txt1 += "<th>" + y .replace(/([a-z])([A-Z])/g, '$1 $2') + "</th>";
+                  }
+                  txt += "<tr>" + txt1 + "</tr>";
+                  txt1 = ''
+                }
+                for (y in response1[x]) {
+                  txt1 += "<td>" + response1[x][y] + "</td>";
+                }
+                txt += "<tr>" + txt1 + "</tr>";
+                txt1 = ''
+
+              }
+              txt += "</table>"
+              document.getElementById("demo").innerHTML = txt;
+			  
+			  var response2 = JSON.parse(xhr.responseText)[0].PostOffice;
+              console.log(response2, response2.length)
+              var txt = "";
+              var txt1 = ""
+			  
+              txt += "<table border='1'>"
+			  
+              for (let x = 0; x <= response2.length; x++) {
+                if (x === 0) {
+                  for (y in response2[x]) {
+                    
+if(y==="Pincode"){
+                      y="PIN Code"
+                    }
+                    txt1 += "<th>" + y .replace(/([a-z])([A-Z])/g, '$1 $2') + "</th>";
+                  }
+                  txt += "<tr>" + txt1 + "</tr>";
+                  txt1 = ''
+                }
+                for (y in response2[x]) {
+                  txt1 += "<td>" + response2[x][y] + "</td>";
+                }
+                txt += "<tr>" + txt1 + "</tr>";
+                txt1 = ''
+
+              }
+              txt += "</table>"
+			  
+              document.getElementById("demo1").innerHTML = txt;
+            
+          }
+        }}
+        else {
+          document.getElementById("demo").innerHTML = "<h3>"+"Please enter a valid PIN code !!!"+"<h3>";
+		  document.getElementById("demo1").innerHTML = "";
+        }
+      }
+    }
+
+  </script>
+</head>
+
+<body>
+  <p >Please enter PIN Code</p>
+  <form name="myForm" autocomplete="off" >
+    <input type="text" name="pin_code" placeholder="enter PIN Code" />
+    <button type="button" id="Save" onclick="myFun()">Search</button>
+  </form>
+
+  <p id="demo"></p>
+  <p id="demo1"></p>
+   
+
+</body>
+
+</html>
